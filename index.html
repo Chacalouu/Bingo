@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte de Bingo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<input class="bingo-input" type="text" id="pseudo-input" placeholder="Entrez votre pseudo" onkeypress="setPseudo(event)">
+<div class="bingo-container" id="bingo-container">
+    <div class="bingo-title" id="bingo-title">Bingo chez Chacalou</div>
+    <div class="bingo-card" id="bingo-card"></div>
+</div>
+<div class="bingo-message-container">
+    <div class="bingo-message" id="bingo-message">BINGO!</div>
+    <button class="screenshot-button" id="screenshot-button" onclick="takeScreenshot()">📸</button>
+</div>
+<div class="controls" id="controls">
+    <button onclick="resetSameNumbers()">Recommencer avec les mêmes numéros</button>
+    <button onclick="resetNewNumbers()">Recommencer avec de nouveaux numéros</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="scripts.js"></script>
+
+</body>
+</html>
