@@ -185,7 +185,7 @@ function takeScreenshot() {
         canvas.toBlob(blob => {
             const item = new ClipboardItem({ 'image/png': blob });
             navigator.clipboard.write([item]);
-            alert('Vous venez de copier l\'image de votre grille, vous avez juste à la coller (ctrl+v) dans le channel discord #bingo et l\'envoyer à Chacalou (le crackito)');
+            alert('Screenshot copied to clipboard!');
         });
     });
 }
