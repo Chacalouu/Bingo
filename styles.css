@@ -109,6 +109,10 @@ body {
 .screenshot-button img {
     margin-right: 10px;
 }
+.social-buttons {
+    display: flex;
+    margin-top: 10px;
+}
 .discord-button, .twitch-button {
     display: flex;
     align-items: center;
@@ -119,17 +123,20 @@ body {
     border: none;
     border-radius: 5px;
     color: #fff;
-    margin-top: 10px;
     text-decoration: none;
 }
 .discord-button {
     background-color: #7289da;
 }
-.discord-button img, .twitch-button img {
+.discord-button img {
     margin-right: 10px;
 }
 .twitch-button {
     background-color: #6441a5;
+    margin-left: 50px;
+}
+.twitch-button img {
+    margin-right: 10px;
 }
 .pseudo-input {
     padding: 10px;
