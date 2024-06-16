@@ -9,16 +9,16 @@ body {
     background-color: #000;
     color: #fff;
 }
-
 .bingo-title {
-    font-size: 2em;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pseudo-input-container {
     margin-bottom: 20px;
 }
-
-.bingo-input {
-    margin-bottom: 20px;
-}
-
 .bingo-container {
     display: flex;
     flex-direction: column;
@@ -26,19 +26,26 @@ body {
     background-color: #000; /* Ensure background is black */
     color: #fff; /* Ensure text is white */
 }
-
 .bingo-card {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     width: 300px;
     padding: 20px;
-    background-color: #fff;
-    border: 2px solid #333;
+    background: linear-gradient(45deg, #000, #555); /* Background gradient black to dark grey */
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
 }
-
+.bingo-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent; /* Transparent background */
+}
 .bingo-cell {
     display: flex;
     justify-content: center;
@@ -51,37 +58,32 @@ body {
     color: #000;
     border: 1px solid #555;
 }
-
 .bingo-cell.checked {
     background-color: #4caf50;
     color: #fff;
 }
-
 .bingo-cell.bingo {
     background-color: #2196f3;
     color: #fff;
 }
-
 .bingo-message-container {
     display: flex;
     align-items: center;
     margin-top: 20px;
+    justify-content: center; /* Center align */
 }
-
 .bingo-message {
     font-size: 2.5em;
     font-weight: bold;
     color: #2196f3;
     display: none;
     animation: color-change 0.5s infinite;
-    margin-right: 10px;
+    margin-right: 30px; /* Separate by 30px */
 }
-
 .controls {
     margin-top: 20px;
     display: none;
 }
-
 .controls button {
     padding: 10px 20px;
     font-size: 1em;
@@ -92,19 +94,72 @@ body {
     background-color: #2196f3;
     color: #fff;
 }
-
 .screenshot-button {
-    background-color: transparent;
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 1em;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196f3;
     color: #fff;
-    font-size: 2em;
 }
-
+.screenshot-button img {
+    margin-right: 10px;
+}
+.discord-button, .twitch-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 10px;
+    text-decoration: none;
+}
+.discord-button {
+    background-color: #7289da;
+}
+.discord-button img, .twitch-button img {
+    margin-right: 10px;
+}
+.twitch-button {
+    background-color: #6441a5;
+}
+.pseudo-input {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.pseudo-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196f3;
+    color: #fff;
+}
 @keyframes color-change {
     0% { color: #2196f3; }
     25% { color: #e91e63; }
     50% { color: #ffeb3b; }
     75% { color: #4caf50; }
     100% { color: #2196f3; }
+}
+.pseudo-header {
+    grid-column: span 5;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent; /* Transparent background */
+    display: none; /* Initially hidden */
 }

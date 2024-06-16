@@ -1,12 +1,41 @@
 let currentNumbers = [];
 let pseudo = '';
 
-function setPseudo(event) {
+function handleKeyPress(event) {
     if (event.key === 'Enter') {
-        pseudo = event.target.value;
-        document.getElementById('bingo-title').textContent = `Grille de ${pseudo}`;
-        event.target.style.display = 'none';
+        setPseudo();
     }
+}
+
+function getRandomEmoji() {
+    const emojis = ["🌴", "🐧", "⚡", "❤️", "😀", "😂", "😍", "😎", "😜", "🤔", "😴", "😭", "😱", "🤕", "🤑", "🤠", "😈", "👿", "💀", "👻", "👽", "💩"];
+    const weights = [1/50, 1/200, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    let sum = weights.reduce((a, b) => a + b, 0);
+    let rand = Math.random() * sum;
+
+    for (let i = 0; i < emojis.length; i++) {
+        if (rand < weights[i]) {
+            return emojis[i];
+        }
+        rand -= weights[i];
+    }
+    return emojis[0]; // Default emoji if something goes wrong
+}
+
+function setPseudo() {
+    const input = document.getElementById('pseudo-input');
+    pseudo = input.value;
+    localStorage.setItem('pseudo', pseudo); // Store pseudo in localStorage
+    const randomEmoji = getRandomEmoji();
+    document.getElementById('pseudo-header').textContent = `Grille de ${pseudo} ${randomEmoji}`;
+    document.getElementById('pseudo-header').style.display = 'block'; // Show pseudo header
+    document.querySelector('.pseudo-input-container').style.display = 'none';
+    document.getElementById('screenshot-button').style.display = 'flex'; // Show screenshot button
+}
+
+function updateTitleWithRandomEmoji() {
+    const randomEmoji = getRandomEmoji();
+    document.getElementById('pseudo-header').textContent = `Grille de ${pseudo} ${randomEmoji}`;
 }
 
 function generateBingoNumbers() {
@@ -36,8 +65,25 @@ function generateBingoNumbers() {
 }
 
 function createBingoCard(columns) {
-    const card = document.getElementById('bingo-card');
+    const card = document.getElementById('bingo-card-container');
     card.innerHTML = ''; // Clear previous cells
+
+    // Add pseudo header
+    const pseudoHeader = document.createElement('div');
+    pseudoHeader.classList.add('pseudo-header');
+    pseudoHeader.id = 'pseudo-header';
+    pseudoHeader.textContent = `Grille de ${pseudo}`;
+    card.appendChild(pseudoHeader);
+
+    // Add BINGO headers
+    const headers = ['B', 'I', 'N', 'G', 'O'];
+    headers.forEach(header => {
+        const headerCell = document.createElement('div');
+        headerCell.classList.add('bingo-header');
+        headerCell.textContent = header;
+        card.appendChild(headerCell);
+    });
+
     const cells = [];
 
     for (let row = 0; row < 5; row++) {
@@ -122,41 +168,42 @@ function checkBingo(cells) {
     }
 
     document.getElementById('bingo-message').style.display = bingo ? 'block' : 'none';
-    document.getElementById('screenshot-button').style.display = bingo ? 'block' : 'none';
     document.getElementById('controls').style.display = bingo ? 'block' : 'none';
 }
 
 function resetSameNumbers() {
-    createBingoCard(currentNumbers);
-    document.getElementById('bingo-message').style.display = 'none';
-    document.getElementById('screenshot-button').style.display = 'none';
-    document.getElementById('controls').style.display = 'none';
+    const cells = document.querySelectorAll('.bingo-cell');
+    cells.forEach(cell => cell.classList.remove('checked', 'bingo'));
+    document.getElementById('pseudo-header').style.display = 'none'; // Hide pseudo header
+    document.querySelector('.pseudo-input-container').style.display = 'block'; // Show pseudo input container
+    document.getElementById('screenshot-button').style.display = 'none'; // Hide screenshot button
 }
 
 function resetNewNumbers() {
-    const newNumbers = generateBingoNumbers();
-    createBingoCard(newNumbers);
-    document.getElementById('bingo-message').style.display = 'none';
-    document.getElementById('screenshot-button').style.display = 'none';
-    document.getElementById('controls').style.display = 'none';
+    const pseudo = localStorage.getItem('pseudo');
+    location.reload(); // Reload the page to get new numbers
+    if (pseudo) {
+        document.getElementById('pseudo-input').value = pseudo;
+    }
 }
 
 function takeScreenshot() {
-    const container = document.getElementById('bingo-container');
-    container.style.backgroundColor = '#000'; // Set background to black
-    container.style.color = '#fff'; // Set text color to white
-    html2canvas(container).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'bingo_screenshot.png';
-        link.click();
-    }).finally(() => {
-        container.style.backgroundColor = ''; // Reset background color
-        container.style.color = ''; // Reset text color
+    const card = document.getElementById('bingo-card-container');
+    html2canvas(card).then(canvas => {
+        canvas.toBlob(blob => {
+            const item = new ClipboardItem({ 'image/png': blob });
+            navigator.clipboard.write([item]);
+            alert('Screenshot copied to clipboard!');
+        });
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const columns = generateBingoNumbers();
     createBingoCard(columns);
+    document.getElementById('screenshot-button').style.display = 'none'; // Hide the screenshot button initially
+    const pseudo = localStorage.getItem('pseudo');
+    if (pseudo) {
+        document.getElementById('pseudo-input').value = pseudo;
+    }
 });

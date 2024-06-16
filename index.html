@@ -4,25 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carte de Bingo</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<input class="bingo-input" type="text" id="pseudo-input" placeholder="Entrez votre pseudo" onkeypress="setPseudo(event)">
-<div class="bingo-container" id="bingo-container">
-    <div class="bingo-title" id="bingo-title">Bingo chez Chacalou</div>
-    <div class="bingo-card" id="bingo-card"></div>
+<div class="bingo-title" id="bingo-title">Bingo chez Chacalou 🌴</div>
+
+<div class="pseudo-input-container">
+    <input class="pseudo-input" id="pseudo-input" type="text" placeholder="Entrez votre pseudo" onkeypress="handleKeyPress(event)">
+    <button class="pseudo-button" onclick="setPseudo()">OK</button>
 </div>
-<div class="bingo-message-container">
+
+<div class="bingo-container">
+    <div class="bingo-card" id="bingo-card-container">
+        <div class="pseudo-header" id="pseudo-header">Grille de [Pseudo]</div>
+        <div class="bingo-header">B</div>
+        <div class="bingo-header">I</div>
+        <div class="bingo-header">N</div>
+        <div class="bingo-header">G</div>
+        <div class="bingo-header">O</div>
+    </div>
+</div>
+<div class="bingo-message-container" id="bingo-message-container">
     <div class="bingo-message" id="bingo-message">BINGO!</div>
-    <button class="screenshot-button" id="screenshot-button" onclick="takeScreenshot()">📸</button>
+    <button class="screenshot-button" id="screenshot-button" onclick="takeScreenshot()">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/camera.png" alt="Camera Icon" width="20" height="20">
+        Screenshot
+    </button>
 </div>
+<a class="discord-button" id="discord-button" href="https://discord.gg/jA6QHa87fA" target="_blank">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" alt="Discord Icon" width="20" height="20">
+    Discord
+</a>
+<a class="twitch-button" id="twitch-button" href="https://www.twitch.tv/chacalouu" target="_blank">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/twitch.png" alt="Twitch Icon" width="20" height="20">
+    Twitch
+</a>
 <div class="controls" id="controls">
     <button onclick="resetSameNumbers()">Recommencer avec les mêmes numéros</button>
     <button onclick="resetNewNumbers()">Recommencer avec de nouveaux numéros</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="scripts.js"></script>
 
 </body>
