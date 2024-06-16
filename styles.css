@@ -78,58 +78,15 @@ body {
     color: #2196f3;
     display: none;
     animation: color-change 0.5s infinite;
-    margin-right: 30px; /* Separate by 30px */
 }
 .controls {
     margin-top: 20px;
     display: flex;
-    gap: 10px;
-}
-.controls button {
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #2196f3;
-    color: #fff;
-}
-.restart-button {
-    display: flex;
-    align-items: center;
+    gap: 15px;
     justify-content: center;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #2196f3;
-    color: #fff;
 }
-.screenshot-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #2196f3;
-    color: #fff;
-}
-.screenshot-button img {
-    margin-right: 10px;
-}
-.social-buttons {
-    display: flex;
-    margin-top: 10px;
-    gap: 50px;
-}
-.discord-button, .twitch-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.controls button,
+.controls a {
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
@@ -137,6 +94,18 @@ body {
     border-radius: 5px;
     color: #fff;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.screenshot-button {
+    background-color: #2196f3;
+}
+.screenshot-button img {
+    margin-right: 10px;
+}
+.restart-button {
+    background-color: #2196f3;
 }
 .discord-button {
     background-color: #7289da;
