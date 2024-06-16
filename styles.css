@@ -82,12 +82,24 @@ body {
 }
 .controls {
     margin-top: 20px;
-    display: none;
+    display: flex;
+    gap: 10px;
 }
 .controls button {
     padding: 10px 20px;
     font-size: 1em;
-    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196f3;
+    color: #fff;
+}
+.restart-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 1em;
     cursor: pointer;
     border: none;
     border-radius: 5px;
@@ -112,6 +124,7 @@ body {
 .social-buttons {
     display: flex;
     margin-top: 10px;
+    gap: 50px;
 }
 .discord-button, .twitch-button {
     display: flex;
@@ -133,7 +146,6 @@ body {
 }
 .twitch-button {
     background-color: #6441a5;
-    margin-left: 50px;
 }
 .twitch-button img {
     margin-right: 10px;

@@ -171,14 +171,6 @@ function checkBingo(cells) {
     document.getElementById('controls').style.display = bingo ? 'block' : 'none';
 }
 
-function resetSameNumbers() {
-    const cells = document.querySelectorAll('.bingo-cell');
-    cells.forEach(cell => cell.classList.remove('checked', 'bingo'));
-    document.getElementById('pseudo-header').style.display = 'none'; // Hide pseudo header
-    document.querySelector('.pseudo-input-container').style.display = 'block'; // Show pseudo input container
-    document.getElementById('screenshot-button').style.display = 'none'; // Hide screenshot button
-}
-
 function resetNewNumbers() {
     const pseudo = localStorage.getItem('pseudo');
     location.reload(); // Reload the page to get new numbers
