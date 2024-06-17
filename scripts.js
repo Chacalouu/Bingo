@@ -168,7 +168,7 @@ function checkBingo(cells) {
     }
 
     document.getElementById('bingo-message').style.display = bingo ? 'block' : 'none';
-    document.getElementById('controls').style.display = bingo ? 'block' : 'none';
+    document.getElementById('controls').style.display = 'flex'; // Show controls on bingo
 }
 
 function resetNewNumbers() {
@@ -193,9 +193,14 @@ function takeScreenshot() {
 document.addEventListener('DOMContentLoaded', () => {
     const columns = generateBingoNumbers();
     createBingoCard(columns);
-    document.getElementById('screenshot-button').style.display = 'flex'; // Show the screenshot button initially
+    document.getElementById('controls').style.display = 'flex'; // Always show controls
     const pseudo = localStorage.getItem('pseudo');
     if (pseudo) {
         document.getElementById('pseudo-input').value = pseudo;
     }
+
+    setTimeout(() => {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-screen').style.display = 'flex';
+    }, 5000); // Display main screen after 5 seconds
 });

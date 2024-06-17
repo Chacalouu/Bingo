@@ -1,13 +1,35 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: #000;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+.welcome-screen, .main-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.welcome-screen {
+    background-color: #000;
+    color: #fff;
+    font-size: 2em;
+    font-weight: bold;
+}
+.loading-icon {
+    font-size: 1.5em;
+    margin-top: 20px;
+}
+.main-screen {
+    display: none;
 }
 .bingo-title {
     font-size: 2.5em;
@@ -150,4 +172,11 @@ body {
     color: #fff;
     background-color: transparent; /* Transparent background */
     display: none; /* Initially hidden */
+}
+.footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 1em;
+    text-align: center;
+    width: 100%;
 }
