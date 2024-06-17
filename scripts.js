@@ -193,7 +193,7 @@ function takeScreenshot() {
 document.addEventListener('DOMContentLoaded', () => {
     const columns = generateBingoNumbers();
     createBingoCard(columns);
-    document.getElementById('screenshot-button').style.display = 'none'; // Hide the screenshot button initially
+    document.getElementById('screenshot-button').style.display = 'flex'; // Show the screenshot button initially
     const pseudo = localStorage.getItem('pseudo');
     if (pseudo) {
         document.getElementById('pseudo-input').value = pseudo;
