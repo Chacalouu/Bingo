@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte de Bingo</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .bingo-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pseudo-input-container {
+            margin-bottom: 20px;
+        }
+        .bingo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+        }
+        .bingo-card {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 300px;
+            padding: 20px;
+            background: linear-gradient(45deg, #000, #555);
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .bingo-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff;
+            background-color: transparent;
+        }
+        .bingo-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 1.2em;
+            border-radius: 5px;
+            color: #000;
+            border: 1px solid #555;
+        }
+        .bingo-cell.checked {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .bingo-cell.bingo {
+            background-color: #2196f3;
+            color: #fff;
+        }
+        .bingo-message-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .bingo-message {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2196f3;
+            display: none;
+            animation: color-change 0.5s infinite;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .controls button,
+        .controls a {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .screenshot-button {
+            background-color: #B48205;
+        }
+        .screenshot-button img {
+            margin-right: 10px;
+        }
+        .restart-button {
+            background-color: #2196f3;
+        }
+        .discord-button {
+            background-color: #7289da;
+        }
+        .discord-button img {
+            margin-right: 10px;
+        }
+        .twitch-button {
+            background-color: #6441a5;
+        }
+        .twitch-button img {
+            margin-right: 10px;
+        }
+        .pseudo-input {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .pseudo-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #2196f3;
+            color: #fff;
+        }
+        .stats-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stats-container p {
+            margin: 5px 0;
+        }
+        .reset-stats-button {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .stats-title {
+            color: #f44336;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        @keyframes color-change {
+            0% { color: #2196f3; }
+            25% { color: #e91e63; }
+            50% { color: #ffeb3b; }
+            75% { color: #4caf50; }
+            100% { color: #2196f3; }
+        }
+        .pseudo-header {
+            grid-column: span 5;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background-color: transparent;
+            display: none;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 1em;
+            text-align: center;
+            width: 100%;
+        }
+        .message-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ff0000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: none;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="message-container" id="message-container">Maji ❤️</div>
+
+<div class="main-screen" id="main-screen">
+    <div class="bingo-title" id="bingo-title">Bingo chez Chacalou 🌴</div>
+
+    <div class="pseudo-input-container">
+        <input class="pseudo-input" id="pseudo-input" type="text" placeholder="Entrez votre pseudo" onkeypress="handleKeyPress(event)">
+        <button class="pseudo-button" onclick="setPseudo()">OK</button>
+    </div>
+
+    <div class="bingo-container">
+        <div class="bingo-card" id="bingo-card-container">
+            <div class="pseudo-header" id="pseudo-header">Grille de [Pseudo]</div>
+            <div class="bingo-header">B</div>
+            <div class="bingo-header">I</div>
+            <div class="bingo-header">N</div>
+            <div class="bingo-header">G</div>
+            <div class="bingo-header">O</div>
+        </div>
+    </div>
+    <div class="bingo-message-container" id="bingo-message-container">
+        <div class="bingo-message" id="bingo-message">BINGO!</div>
+    </div>
+    <div class="controls" id="controls">
+        <button class="screenshot-button" id="screenshot-button" onclick="takeScreenshot()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/camera.png" alt="Camera Icon" width="20" height="20">
+            Screenshot
+        </button>
+        <button class="restart-button" onclick="resetNewNumbers()">🎲 Recommencer</button>
+        <a class="discord-button" id="discord-button" href="https://discord.gg/jA6QHa87fA" target="_blank">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" alt="Discord Icon" width="20" height="20">
+            Discord
+        </a>
+        <a class="twitch-button" id="twitch-button" href="https://www.twitch.tv/chacalouu" target="_blank">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/twitch.png" alt="Twitch Icon" width="20" height="20">
+            Twitch
+        </a>
+    </div>
+</div>
+
+<div class="stats-container" id="stats-container" style="display: none;">
+    <p class="stats-title" id="stats-title">Stats</p>
+    <p>Parties jouées: <span id="games-played">0</span></p>
+    <p>Parties gagnées: <span id="games-won">0</span></p>
+    <button class="reset-stats-button" onclick="resetStats()">Réinitialiser les stats</button>
+</div>
+
+<script>
+    let currentNumbers = [];
+    let pseudo = '';
+    let emojiIndex = 0;
+    const emojis = ["🌴", "🐧", "⚡", "❤️", "😀", "😂", "😍", "😎", "😜", "🤔", "😴", "😭", "😱", "🤕", "🤑", "🤠", "😈", "👿", "💀", "👻", "👽", "💩"];
+    let firstCellChecked = false;
+
+    function changeEmoji() {
+        document.getElementById('emoji-container').textContent = emojis[emojiIndex];
+        emojiIndex = (emojiIndex + 1) % emojis.length;
+    }
+    setInterval(changeEmoji, 200);
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            setPseudo();
+        }
+    }
+
+    function getRandomEmoji() {
+        const emojis = ["🌴", "🐧", "⚡", "❤️", "😀", "😂", "😍", "😎", "😜", "🤔", "😴", "😭", "😱", "🤕", "🤑", "🤠", "😈", "👿", "💀", "👻", "👽", "💩"];
+        const weights = [1/50, 1/200, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        let sum = weights.reduce((a, b) => a + b, 0);
+        let rand = Math.random() * sum;
+
+        for (let i = 0; i < emojis.length; i++) {
+            if (rand < weights[i]) {
+                return emojis[i];
+            }
+            rand -= weights[i];
+        }
+        return emojis[0]; // Default emoji if something goes wrong
+    }
+
+    function setPseudo() {
+        const input = document.getElementById('pseudo-input');
+        pseudo = input.value;
+        localStorage.setItem('pseudo', pseudo); // Store pseudo in localStorage
+        const randomEmoji = getRandomEmoji();
+        document.getElementById('pseudo-header').textContent = `Grille de ${pseudo} ${randomEmoji}`;
+        document.getElementById('pseudo-header').style.display = 'block'; // Show pseudo header
+        document.querySelector('.pseudo-input-container').style.display = 'none';
+        document.getElementById('screenshot-button').style.display = 'flex'; // Show screenshot button
+        document.getElementById('stats-title').textContent = `Stats ${pseudo}`;
+        loadStats(); // Load stats when pseudo is set
+        document.getElementById('stats-container').style.display = 'block'; // Show stats container
+    }
+
+    function updateTitleWithRandomEmoji() {
+        const randomEmoji = getRandomEmoji();
+        document.getElementById('pseudo-header').textContent = `Grille de ${pseudo} ${randomEmoji}`;
+    }
+
+    function generateBingoNumbers() {
+        const ranges = [
+            { min: 1, max: 15 },
+            { min: 16, max: 30 },
+            { min: 31, max: 45 },
+            { min: 46, max: 60 },
+            { min: 61, max: 75 }
+        ];
+
+        let columns = [];
+
+        ranges.forEach(range => {
+            let columnNumbers = [];
+            while (columnNumbers.length < 5) {
+                let num = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+                if (!columnNumbers.includes(num)) {
+                    columnNumbers.push(num);
+                }
+            }
+            columns.push(columnNumbers);
+        });
+
+        return columns;
+    }
+
+    function createBingoCard(columns) {
+        const card = document.getElementById('bingo-card-container');
+        card.innerHTML = ''; // Clear previous cells
+
+        // Add pseudo header
+        const pseudoHeader = document.createElement('div');
+        pseudoHeader.classList.add('pseudo-header');
+        pseudoHeader.id = 'pseudo-header';
+        pseudoHeader.textContent = `Grille de ${pseudo}`;
+        card.appendChild(pseudoHeader);
+
+        // Add BINGO headers
+        const headers = ['B', 'I', 'N', 'G', 'O'];
+        headers.forEach(header => {
+            const headerCell = document.createElement('div');
+            headerCell.classList.add('bingo-header');
+            headerCell.textContent = header;
+            card.appendChild(headerCell);
+        });
+
+        const cells = [];
+
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                const cell = document.createElement('div');
+                cell.classList.add('bingo-cell');
+                cell.textContent = columns[col][row];
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                cell.addEventListener('click', () => {
+                    if (!firstCellChecked) {
+                        firstCellChecked = true;
+                        incrementGamesPlayed();
+                    }
+                    cell.classList.toggle('checked');
+                    if (cell.textContent == '69') {
+                        showMessage();
+                    }
+                    checkBingo(cells);
+                });
+                cells.push(cell);
+                card.appendChild(cell);
+            }
+        }
+    }
+
+    function showMessage() {
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.style.display = 'block';
+        setTimeout(() => {
+            messageContainer.style.display = 'none';
+        }, 2000);
+    }
+
+    function checkBingo(cells) {
+        const rows = Array.from({ length: 5 }, () => 0);
+        const cols = Array.from({ length: 5 }, () => 0);
+        let diag1 = 0, diag2 = 0;
+
+        cells.forEach(cell => {
+            const row = cell.dataset.row;
+            const col = cell.dataset.col;
+            if (cell.classList.contains('checked')) {
+                rows[row]++;
+                cols[col]++;
+                if (row == col) diag1++;
+                if (row == 4 - col) diag2++;
+            }
+        });
+
+        let bingo = false;
+
+        // Clear all previous bingo classes
+        cells.forEach(cell => cell.classList.remove('bingo'));
+
+        // Check rows
+        rows.forEach((count, rowIndex) => {
+            if (count === 5) {
+                bingo = true;
+                cells.forEach(cell => {
+                    if (cell.dataset.row == rowIndex) {
+                        cell.classList.add('bingo');
+                    }
+                });
+            }
+        });
+
+        // Check columns
+        cols.forEach((count, colIndex) => {
+            if (count === 5) {
+                bingo = true;
+                cells.forEach(cell => {
+                    if (cell.dataset.col == colIndex) {
+                        cell.classList.add('bingo');
+                    }
+                });
+            }
+        });
+
+        // Check diagonals
+        if (diag1 === 5) {
+            bingo = true;
+            cells.forEach(cell => {
+                if (cell.dataset.row == cell.dataset.col) {
+                    cell.classList.add('bingo');
+                }
+            });
+        }
+
+        if (diag2 === 5) {
+            bingo = true;
+            cells.forEach(cell => {
+                if (cell.dataset.row == 4 - cell.dataset.col) {
+                    cell.classList.add('bingo');
+                }
+            });
+        }
+
+        document.getElementById('bingo-message').style.display = bingo ? 'block' : 'none';
+        document.getElementById('controls').style.display = 'flex'; // Show controls on bingo
+
+        if (bingo) {
+            incrementGamesWon();
+        }
+    }
+
+    function resetNewNumbers() {
+        const pseudo = localStorage.getItem('pseudo');
+        location.reload(); // Reload the page to get new numbers
+        if (pseudo) {
+            document.getElementById('pseudo-input').value = pseudo;
+        }
+    }
+
+    function takeScreenshot() {
+        const card = document.getElementById('bingo-card-container');
+        html2canvas(card).then(canvas => {
+            canvas.toBlob(blob => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]);
+                alert("Vous venez de copier l'image de votre grille, vous avez juste à la coller (ctrl+v) dans le channel discord #bingo et l'envoyer à Chacalou (le crackito)");
+            });
+        });
+    }
+
+    function loginToGame() {
+        document.getElementById('main-screen').style.display = 'flex';
+    }
+
+    function loadStats() {
+        const gamesPlayed = localStorage.getItem(`${pseudo}_gamesPlayed`) || 0;
+        const gamesWon = localStorage.getItem(`${pseudo}_gamesWon`) || 0;
+
+        document.getElementById('games-played').textContent = gamesPlayed;
+        document.getElementById('games-won').textContent = gamesWon;
+    }
+
+    function incrementGamesPlayed() {
+        let gamesPlayed = localStorage.getItem(`${pseudo}_gamesPlayed`) || 0;
+        gamesPlayed = parseInt(gamesPlayed) + 1;
+        localStorage.setItem(`${pseudo}_gamesPlayed`, gamesPlayed);
+        document.getElementById('games-played').textContent = gamesPlayed;
+    }
+
+    function incrementGamesWon() {
+        let gamesWon = localStorage.getItem(`${pseudo}_gamesWon`) || 0;
+        gamesWon = parseInt(gamesWon) + 1;
+        localStorage.setItem(`${pseudo}_gamesWon`, gamesWon);
+        document.getElementById('games-won').textContent = gamesWon;
+    }
+
+    function resetStats() {
+        localStorage.setItem(`${pseudo}_gamesPlayed`, 0);
+        localStorage.setItem(`${pseudo}_gamesWon`, 0);
+        loadStats();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const columns = generateBingoNumbers();
+        createBingoCard(columns);
+        document.getElementById('controls').style.display = 'flex'; // Always show controls
+        const pseudo = localStorage.getItem('pseudo');
+        if (pseudo) {
+            document.getElementById('pseudo-input').value = pseudo;
+        }
+
+        setTimeout(loginToGame, 5000); // Automatically login to the game after 5 seconds
+    });
+</script>
+
+</body>
+</html>
